@@ -31,7 +31,7 @@ console.log(tokenparts[1])
 console.log('prima di keycloak')
 
 const axios = require('axios').default;
-await axios.get('http://keycloak:8100/auth/realms/micado/protocol/openid-connect/userinfo', {
+await axios.get('http://keycloak.micado.csi.it:8100/auth/realms/micado/protocol/openid-connect/userinfo', {
     headers: {
         'Authorization': 'Bearer ' + tokenparts[1]
     }
