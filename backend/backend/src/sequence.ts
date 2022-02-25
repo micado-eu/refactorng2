@@ -45,7 +45,7 @@ export class MySequence implements SequenceHandler {
               const route = this.findRoute(request);
               // ------ ADD SNIPPET ---------
               //call authentication action
-              console.log(request)
+              //console.log(request)
               const authUser: any = await this.authenticateRequest(request);
               console.log(authUser)
               // ------------- END OF SNIPPET -------------
