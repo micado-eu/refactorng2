@@ -101,6 +101,23 @@ export class KeycloakIdentityTenantManagerController {
 
   }
 
+  @post('/createGroup')
+  async createGroup(
+    @param({name: 'name', in: 'query', required: false}) name: String,
+    @param({name: 'realm', in: 'query', required: false}) realm: String,
+    @param({name: 'token', in: 'query', required: false}) token: String,
+    @param({name: 'baseurl', in: 'query', required: false}) baseurl: String,
+  ): Promise<any> {
+    //Preconditions
+    return this.keycloakService.createGroup(
+      name,
+      realm,
+      token,
+      baseurl
+    );
+
+  }
+
   @get('/addRoleToUser')
   async addRole(
     @param({name: 'baseurl', in: 'query', required: false}) baseurl: String,
