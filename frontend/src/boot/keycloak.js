@@ -1,5 +1,9 @@
 // import Vue from 'vue'
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
+// import getters from './store/module-example/getters.js'
+// import mutations from './store/module-example/mutations.js'
+// import store from './store'
+
 /*
 function tokenInterceptor () {
   Vue.prototype.$axios.interceptors.request.use(config => {
@@ -46,33 +50,43 @@ export default async ({ Vue, router, store, app }) => {
     })
   }
 
-  return new Promise(resolve => {
-    Vue.use(VueKeyCloak, {
-      init: {
-        onLoad: 'check-sso', // or 'check-sso'
-        flow: 'standard',
-        pkceMethod: 'S256',
-        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        checkLoginIframe: false // otherwise it would reload the window every so seconds
-      },
-      config: {
-        url: 'http://keycloak.micado.csi.it:8100/auth',
-        realm: 'micado',
-        clientId: 'migrant'
-      },
-      onReady: (keycloak) => {
-        console.log('onReady passed')
-        console.log(keycloak)
-        tokenInterceptor()
-        console.log(Vue)
-        resolve()
-      },
-      onInitError: (error) => {
-        console.log('we have an error')
-        console.log(error)
-      }
+  let keyPromise = null
+  const realm = store.getters['example/getRealm']
+  if (realm !== null) {
+    console.log('Esiste il realm')
+    console.log(realm)
+    keyPromise = new Promise(resolve => {
+      Vue.use(VueKeyCloak, {
+        init: {
+          onLoad: 'check-sso', // or 'check-sso'
+          flow: 'standard',
+          pkceMethod: 'S256',
+          silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+          checkLoginIframe: false // otherwise it would reload the window every so seconds
+        },
+        config: {
+          url: 'http://keycloak.micado.csi.it:8100/auth',
+          realm: realm,
+          clientId: 'migrant'
+        },
+        onReady: (keycloak) => {
+          console.log('onReady passed')
+          console.log(keycloak)
+          console.log(store)
+          store.commit('example/setRealm', keycloak.realm)
+          tokenInterceptor()
+          console.log(Vue)
+          resolve()
+        },
+        onInitError: (error) => {
+          console.log('we have an error')
+          console.log(error)
+        }
+      })
     })
-  })
+  }
+
+  return keyPromise
 }
 
 /*
