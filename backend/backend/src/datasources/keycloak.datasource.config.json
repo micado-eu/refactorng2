@@ -62,6 +62,33 @@
     },
     {
       "template": {
+        "method": "POST",
+        "url": "http://{baseurl}/auth/admin/realms/{realm}/users/{userId}/groups/{groupId}",
+        "headers": {
+          "accept": "*/*",
+          "content-type": "application/json",
+          "Authorization": "Bearer {token}"
+        },
+        "body": {
+          "name": "{name}"
+        },
+        "options": {
+          "strictSSL": false,
+          "useQuerystring": true
+        }
+      },
+      "functions": {
+        "addToGroup": [
+          "userId",
+          "groupId",
+          "realm",
+          "token",
+          "baseurl"
+        ]
+      }
+    },
+    {
+      "template": {
         "method": "GET",
         "url": "http://{baseurl}/auth/admin/realms/{realm}/clients/{clientId}/roles",
         "headers": {
@@ -79,6 +106,28 @@
           "baseurl",
           "realm",
           "clientId",
+          "token"
+        ]
+      }
+    },
+    {
+      "template": {
+        "method": "GET",
+        "url": "http://{baseurl}/auth/admin/realms/{realm}/groups",
+        "headers": {
+          "accept": "*/*",
+          "content-type": "application/json",
+          "Authorization": "Bearer {token}"
+        },
+        "options": {
+          "strictSSL": false,
+          "useQuerystring": true
+        }
+      },
+      "functions": {
+        "getGroupId": [
+          "baseurl",
+          "realm",
           "token"
         ]
       }

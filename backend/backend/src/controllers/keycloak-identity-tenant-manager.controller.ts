@@ -68,6 +68,46 @@ export class KeycloakIdentityTenantManagerController {
       return user
     }
   }
+/*
+  @post('/createKeycloakUserWithRoleAndGroup')
+  async createKeycloakUserWithRoleAndGroup(
+    @param({name: 'username', in: 'query', required: false}) username: String,
+    @param({name: 'realm', in: 'query', required: false}) realm: String,
+    @param({name: 'token', in: 'query', required: false}) token: String,
+    @param({name: 'baseurl', in: 'query', required: false}) baseurl: String,
+    @param({name: 'role', in: 'query', required: false}) role: String[] = [],
+    @param({name: 'clientId', in: 'query', required: false}) clientId: String[]= [],
+    @param({name: 'group', in: 'query', required: false}) group: String[] = [],
+  ): Promise<any> {
+    //Preconditions
+    await this.createUser(username, realm, token, baseurl)
+    var user = await this.keycloakService.getUser(
+      baseurl,
+      realm,
+      username,
+      token
+    )
+    console.log("I am new user")
+    console.log(user)
+    if(group.length >0){
+      group.forEach((group)=>{
+        let groups = this.getGroupId(baseurl, realm, token)
+      })
+      await this.addToGroup()
+    }
+    if (role != "") {
+      console.log("inside if")
+      console.log(user)
+      //var client_id = await this.getClientId(baseurl, realm, clientId, token)
+      //console.log(client_id)
+      await this.addRole(baseurl, realm, clientId, token, user[0].id, role)
+      return user
+    }
+    else {
+      return user
+    }
+  }*/
+
   @get('/getClientRoles')
   async getClientRoles(
     @param({name: 'baseurl', in: 'query', required: false}) baseurl: String,
@@ -101,7 +141,41 @@ export class KeycloakIdentityTenantManagerController {
 
   }
 
+  @get('/getGroupId')
+  async getGroupId(
+    @param({name: 'baseurl', in: 'query', required: false}) baseurl: String,
+    @param({name: 'realm', in: 'query', required: false}) realm: String,
+    @param({name: 'token', in: 'query', required: false}) token: String,
+  ): Promise<any> {
+    //Preconditions
+    return this.keycloakService.getGroupId(
+      baseurl,
+      realm,
+      token
+    );
+
+  }
+
   @post('/createGroup')
+  async addToGroup(
+    @param({name: 'userId', in: 'query', required: false}) userId: String,
+    @param({name: 'groupId', in: 'query', required: false}) groupId: String,
+    @param({name: 'realm', in: 'query', required: false}) realm: String,
+    @param({name: 'token', in: 'query', required: false}) token: String,
+    @param({name: 'baseurl', in: 'query', required: false}) baseurl: String,
+  ): Promise<any> {
+    //Preconditions
+    return this.keycloakService.addToGroup(
+      userId,
+      groupId,
+      realm,
+      token,
+      baseurl
+    );
+
+  }
+
+  @post('/addToGroup')
   async createGroup(
     @param({name: 'name', in: 'query', required: false}) name: String,
     @param({name: 'realm', in: 'query', required: false}) realm: String,
